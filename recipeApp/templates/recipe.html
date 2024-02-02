@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{%block title %} Add Recipes {%endblock%}
+
+{%block content%}
+
+{{request.user}}
+{{request.user.email}}
+
+<div class="container mt-5">
+    
+    <form class="col-6 mx-auto card p-3 shadow-lg" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h1>Add Recipe</h1>
+        <hr>
+        <div class="mb-3">
+            <label for="formGroupExampleInput" class="form-label">Recipe Name</label>
+            <input type="text" name="recipe_name" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="formGroupExampleInput2" class="form-label">Recipe Description</label>
+            <textarea class="form-control" name="recipe_description" rows="3" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="formGroupExampleInput2" class="form-label">Recipe Image</label>
+            <input type="file" name="recipe_image" accept=".jpeg , .jpg, .png"class="form-control">
+        </div>
+        <div class="mb-3">
+        <button type="submit" class="btn btn-danger">Add Recipe</button>
+        </div>
+
+    </form>
+    <div class="mt-5">
+      <div class="mx-auto col-4">
+        <form>
+          <div class="mb-3">
+          <input name="search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          </div>
+          <center><button class="btn btn-outline-success " type="submit">Search</button></center>
+        </form>
+      </div>
+    </div>
+
+</div>
+
+{% if recipeData %}
+<table class="table mt-5">
+  <thead>
+    <tr>
+      <th scope="col">S No.</th>
+      <th scope="col">Recipe Name</th>
+      <th scope="col">Recipe Description</th>
+      <th scope="col">Recipe Image</th>
+      <th scope="col">#</th>
+      <th scope="col">#</th>
+
+    </tr>
+  </thead>
+  <tbody>
+      {% for recipeData in recipeData %}
+    <tr>
+      <th scope="row">{{forloop.counter}}</th>
+      <td>{{recipeData.recipe_name}}</td>
+      <td>{{recipeData.recipe_description}}</td>
+      <td><img src="/media/{{recipeData.recipe_image}}" alt="image not found"></td>
+      <td><a class="btn btn-danger" href="/deleteRecipe/{{recipeData.id}}">DELETE</a>
+      <td><a class="btn btn-success" href="/updateRecipe/{{recipeData.id}}">UPDATE</a>
+
+    </tr>
+    {% endfor %}
+  
+  </tbody>
+</table>
+{% else%}
+<div class="mt-5">
+  <center><h3>NO RECIPE FOUND</h3><center>
+</div>
+<div class="mt-5">
+</div>
+{% endif %}
+{% endblock %}
